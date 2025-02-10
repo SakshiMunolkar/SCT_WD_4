@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://images.unsplash.com/photo-1517976487492-5750f3195933') no-repeat center center fixed;
+            background-size: cover;
+            text-align: center;
+        }
+        #background-selector {
+            margin: 10px;
+        }
+        #todo-container {
+            width: 300px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        ul {
+            list-style: decimal;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        button {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="background-selector">
+        <label for="backgrounds">Choose Background: </label>
+        <select id="backgrounds" onchange="changeBackground()">
+            <option value="https://images.unsplash.com/photo-1517976487492-5750f3195933">Plane</option>
+            <option value="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0">Nature</option>
+            <option value="https://images.unsplash.com/photo-1519681393784-d120267933ba">City</option>
+        </select>
+    </div>
+    
+    <div id="todo-container">
+        <h2>To-Do List</h2>
+        <input type="text" id="taskInput" placeholder="Add a task">
+        <input type="date" id="dateInput">
+        <input type="time" id="timeInput">
+        <button onclick="addTask()">Add</button>
+        <ul id="taskList"></ul>
+    </div>
+    
+    <script>
+        function changeBackground() {
+            let selectedBackground = document.getElementById('backgrounds').value;
+            document.body.style.background = `url('${selectedBackground}') no-repeat center center fixed`;
+            document.body.style.backgroundSize = 'cover';
+        }
+
+        function addTask() {
+            let taskText = document.getElementById('taskInput').value;
+            let taskDate = document.getElementById('dateInput').value;
+            let taskTime = document.getElementById('timeInput').value;
+            if (taskText === "") return;
+            
+            let li = document.createElement('li');
+            li.innerHTML = `${taskText} - ${taskDate} ${taskTime} <button onclick="editTask(this)">Edit</button> <button onclick="removeTask(this)">Done</button>`;
+            document.getElementById('taskList').appendChild(li);
+            
+            document.getElementById('taskInput').value = "";
+            document.getElementById('dateInput').value = "";
+            document.getElementById('timeInput').value = "";
+        }
+        
+        function removeTask(button) {
+            button.parentElement.remove();
+        }
+        
+        function editTask(button) {
+            let li = button.parentElement;
+            let textParts = li.innerText.split(" - ");
+            let taskText = textParts[0];
+            let dateTimeParts = textParts[1].split(" ");
+            let taskDate = dateTimeParts[0];
+            let taskTime = dateTimeParts[1];
+            
+            document.getElementById('taskInput').value = taskText;
+            document.getElementById('dateInput').value = taskDate;
+            document.getElementById('timeInput').value = taskTime;
+            
+            li.remove();
+        }
+    </script>
+</body>
+</html>
